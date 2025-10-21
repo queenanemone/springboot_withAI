@@ -1,3 +1,5 @@
+**코드와 readme 전부 Claude로 작성되었음을 미리 알립니다**
+
 # 📋 Spring Boot 게시판 프로젝트
 
 Spring Boot와 JPA를 활용한 간단한 CRUD 게시판 애플리케이션입니다.
