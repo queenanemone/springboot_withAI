@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판 - 목록</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+
+        .btn-write {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-write:hover {
+            background-color: #45a049;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            color: #333;
+            font-weight: bold;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .board-title {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .board-title:hover {
+            color: #4CAF50;
+            text-decoration: underline;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 50px;
+            color: #999;
+        }
+
+        .info {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📋 게시판</h1>
+
+    <a href="/board/write" class="btn-write">✏️ 글쓰기</a>
+
+    <table th:if="${not #lists.isEmpty(boardList)}">
+        <thead>
+        <tr>
+            <th class="text-center" style="width: 10%">번호</th>
+            <th style="width: 40%">제목</th>
+            <th class="text-center" style="width: 15%">작성자</th>
+            <th class="text-center" style="width: 10%">조회수</th>
+            <th class="text-center" style="width: 25%">작성일</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="board : ${boardList}">
+            <td class="text-center" th:text="${board.id}">1</td>
+            <td>
+                <a th:href="@{/board/detail/{id}(id=${board.id})}"
+                   class="board-title"
+                   th:text="${board.title}">제목</a>
+            </td>
+            <td class="text-center" th:text="${board.writer}">홍길동</td>
+            <td class="text-center" th:text="${board.viewCount}">0</td>
+            <td class="text-center" th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm')}">2024-01-01 12:00</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="no-data" th:if="${#lists.isEmpty(boardList)}">
+        <p>📭 작성된 게시글이 없습니다.</p>
+        <p>첫 번째 게시글을 작성해보세요!</p>
+    </div>
+
+    <div class="info">
+        <strong>총 게시글:</strong> <span th:text="${#lists.size(boardList)}">0</span>개
+    </div>
+</div>
+</body>
+</html>

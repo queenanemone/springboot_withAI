@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판 - 상세보기</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .info {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 2px solid #4CAF50;
+            margin-bottom: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .info-left span {
+            margin-right: 15px;
+        }
+
+        .info-right {
+            color: #999;
+        }
+
+        .content {
+            min-height: 300px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            line-height: 1.8;
+            color: #333;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .button-group {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        button, a.btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .btn-list {
+            background-color: #999;
+            color: white;
+        }
+
+        .btn-list:hover {
+            background-color: #888;
+        }
+
+        .btn-edit {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background-color: #45a049;
+        }
+
+        .btn-delete {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background-color: #da190b;
+        }
+
+        .stats {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+    <script>
+        function deleteBoard(id) {
+            if (confirm('정말 삭제하시겠습니까?')) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/board/delete/' + id;
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    <h1 th:text="${board.title}">게시글 제목</h1>
+
+    <div class="info">
+        <div class="info-left">
+            <span>👤 작성자: <strong th:text="${board.writer}">홍길동</strong></span>
+            <span>👁️ 조회수: <strong th:text="${board.viewCount}">0</strong></span>
+        </div>
+        <div class="info-right">
+            <span th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm:ss')}">2024-01-01 12:00:00</span>
+        </div>
+    </div>
+
+    <div class="content" th:text="${board.content}">
+        게시글 내용이 여기에 표시됩니다.
+    </div>
+
+    <div class="stats">
+        <div>
+            <strong>작성일:</strong> <span th:text="${#temporals.format(board.createdAt, 'yyyy년 MM월 dd일 HH:mm')}">2024-01-01 12:00</span>
+        </div>
+        <div>
+            <strong>수정일:</strong> <span th:text="${#temporals.format(board.updatedAt, 'yyyy년 MM월 dd일 HH:mm')}">2024-01-01 12:00</span>
+        </div>
+    </div>
+
+    <div class="button-group">
+        <a href="/board/list" class="btn btn-list">📋 목록</a>
+        <a th:href="@{/board/edit/{id}(id=${board.id})}" class="btn btn-edit">✏️ 수정</a>
+        <button type="button" class="btn-delete" th:onclick="'deleteBoard(' + ${board.id} + ')'">🗑️ 삭제</button>
+    </div>
+</div>
+</body>
+</html>
