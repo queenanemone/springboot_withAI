@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Spring Boot 게시판</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+		
+		body {
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			min-height: 100vh;
+		}
+		
+		/* 네비게이션 바 */
+		nav {
+			background: rgba(255, 255, 255, 0.95);
+			padding: 1rem 2rem;
+			box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+			position: sticky;
+			top: 0;
+			z-index: 100;
+		}
+		
+		nav .container {
+			max-width: 1200px;
+			margin: 0 auto;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+		
+		nav .logo {
+			font-size: 24px;
+			font-weight: bold;
+			color: #667eea;
+		}
+		
+		nav ul {
+			display: flex;
+			list-style: none;
+			gap: 2rem;
+		}
+		
+		nav a {
+			text-decoration: none;
+			color: #333;
+			font-weight: 500;
+			transition: color 0.3s;
+		}
+		
+		nav a:hover {
+			color: #667eea;
+		}
+		
+		/* 히어로 섹션 */
+		.hero {
+			text-align: center;
+			padding: 100px 20px;
+			color: white;
+			position: relative;
+		}
+		
+		.ai-badge {
+			display: inline-block;
+			background: rgba(255, 255, 255, 0.2);
+			backdrop-filter: blur(10px);
+			padding: 8px 20px;
+			border-radius: 20px;
+			font-size: 14px;
+			font-weight: bold;
+			margin-bottom: 20px;
+			border: 2px solid rgba(255, 255, 255, 0.3);
+			animation: pulse 2s infinite;
+		}
+		
+		@keyframes pulse {
+			0%, 100% {
+				transform: scale(1);
+			}
+			50% {
+				transform: scale(1.05);
+			}
+		}
+		
+		.hero h1 {
+			font-size: 48px;
+			margin-bottom: 20px;
+			animation: fadeInDown 1s;
+		}
+		
+		.hero p {
+			font-size: 20px;
+			margin-bottom: 40px;
+			animation: fadeInUp 1s;
+		}
+		
+		.hero .btn-group {
+			display: flex;
+			justify-content: center;
+			gap: 20px;
+			flex-wrap: wrap;
+		}
+		
+		/* 버튼 스타일 */
+		.btn {
+			display: inline-block;
+			padding: 15px 40px;
+			border-radius: 50px;
+			text-decoration: none;
+			font-weight: bold;
+			font-size: 16px;
+			transition: all 0.3s;
+			cursor: pointer;
+		}
+		
+		.btn-primary {
+			background: white;
+			color: #667eea;
+		}
+		
+		.btn-primary:hover {
+			transform: translateY(-3px);
+			box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+		}
+		
+		.btn-secondary {
+			background: transparent;
+			color: white;
+			border: 2px solid white;
+		}
+		
+		.btn-secondary:hover {
+			background: white;
+			color: #667eea;
+		}
+		
+		/* 기능 카드 섹션 */
+		.features {
+			max-width: 1200px;
+			margin: -50px auto 50px;
+			padding: 0 20px;
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+			gap: 30px;
+		}
+		
+		.feature-card {
+			background: white;
+			padding: 40px 30px;
+			border-radius: 15px;
+			text-align: center;
+			box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+			transition: all 0.3s;
+			cursor: pointer;
+		}
+		
+		.feature-card:hover {
+			transform: translateY(-10px);
+			box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+		}
+		
+		.feature-card .icon {
+			font-size: 48px;
+			margin-bottom: 20px;
+		}
+		
+		.feature-card h3 {
+			color: #333;
+			margin-bottom: 15px;
+			font-size: 24px;
+		}
+		
+		.feature-card p {
+			color: #666;
+			line-height: 1.6;
+			margin-bottom: 20px;
+		}
+		
+		.feature-card .card-btn {
+			display: inline-block;
+			padding: 10px 25px;
+			background: #667eea;
+			color: white;
+			border-radius: 25px;
+			text-decoration: none;
+			transition: all 0.3s;
+		}
+		
+		.feature-card .card-btn:hover {
+			background: #764ba2;
+		}
+		
+		/* 통계 섹션 */
+		.stats {
+			background: white;
+			padding: 60px 20px;
+			margin-top: 50px;
+		}
+		
+		.stats .container {
+			max-width: 1200px;
+			margin: 0 auto;
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+			gap: 40px;
+			text-align: center;
+		}
+		
+		.stat-item h2 {
+			font-size: 48px;
+			color: #667eea;
+			margin-bottom: 10px;
+		}
+		
+		.stat-item p {
+			color: #666;
+			font-size: 18px;
+		}
+		
+		/* 푸터 */
+		footer {
+			background: #2d3748;
+			color: white;
+			text-align: center;
+			padding: 30px 20px;
+			margin-top: 50px;
+		}
+		
+		footer p {
+			margin-bottom: 10px;
+		}
+		
+		footer a {
+			color: #667eea;
+			text-decoration: none;
+		}
+		
+		/* 애니메이션 */
+		@keyframes fadeInDown {
+			from {
+				opacity: 0;
+				transform: translateY(-30px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+		
+		@keyframes fadeInUp {
+			from {
+				opacity: 0;
+				transform: translateY(30px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+		
+		/* 반응형 */
+		@media (max-width: 768px) {
+			nav ul {
+				gap: 1rem;
+				font-size: 14px;
+			}
+			
+			.hero h1 {
+				font-size: 32px;
+			}
+			
+			.hero p {
+				font-size: 16px;
+			}
+			
+			.hero .btn-group {
+				flex-direction: column;
+				align-items: center;
+			}
+		}
+	</style>
+</head>
+<body>
+	<!-- 네비게이션 바 -->
+	<nav>
+		<div class="container">
+			<div class="logo">📝 Board System</div>
+			<ul>
+				<li><a href="/">홈</a></li>
+				<li><a href="/board/list">게시판</a></li>
+				<li><a href="/about">소개</a></li>
+				<li><a href="/contact">문의</a></li>
+			</ul>
+		</div>
+	</nav>
+	
+	<!-- 히어로 섹션 -->
+	<section class="hero">
+		<div class="ai-badge">🤖 Built with AI</div>
+		<h1>Spring Boot 게시판 시스템</h1>
+		<p>JPA와 Thymeleaf를 활용한 모던 웹 애플리케이션</p>
+		<p style="font-size: 16px; margin-top: 10px; opacity: 0.9;">
+			✨ Developed with Claude AI Assistant
+		</p>
+		<div class="btn-group">
+			<a href="/board/list" class="btn btn-primary">게시판 보기</a>
+			<a href="/board/write" class="btn btn-secondary">글 작성하기</a>
+		</div>
+	</section>
+	
+	<!-- 기능 카드 섹션 -->
+	<section class="features">
+		<div class="feature-card" onclick="location.href='/board/list'">
+			<div class="icon">📋</div>
+			<h3>게시판</h3>
+			<p>자유롭게 글을 작성하고 다른 사용자들과 소통하세요.</p>
+			<a href="/board/list" class="card-btn">목록 보기</a>
+		</div>
+		
+		<div class="feature-card" onclick="location.href='/board/write'">
+			<div class="icon">✏️</div>
+			<h3>글 작성</h3>
+			<p>새로운 게시글을 작성하고 여러분의 생각을 공유하세요.</p>
+			<a href="/board/write" class="card-btn">작성하기</a>
+		</div>
+		
+		<div class="feature-card" onclick="location.href='/about'">
+			<div class="icon">ℹ️</div>
+			<h3>프로젝트 소개</h3>
+			<p>이 프로젝트의 기술 스택과 개발 과정을 알아보세요.</p>
+			<a href="/about" class="card-btn">자세히 보기</a>
+		</div>
+		
+		<div class="feature-card" onclick="location.href='/contact'">
+			<div class="icon">📧</div>
+			<h3>문의하기</h3>
+			<p>궁금한 점이나 제안사항이 있으시면 연락주세요.</p>
+			<a href="/contact" class="card-btn">문의하기</a>
+		</div>
+	</section>
+	
+	<!-- 통계 섹션 -->
+	<section class="stats">
+		<div class="container">
+			<div class="stat-item">
+				<h2 th:text="${totalBoards ?: 0}">0</h2>
+				<p>총 게시글</p>
+			</div>
+			<div class="stat-item">
+				<h2>24/7</h2>
+				<p>서비스 운영</p>
+			</div>
+			<div class="stat-item">
+				<h2>100%</h2>
+				<p>무료 이용</p>
+			</div>
+			<div class="stat-item">
+				<h2>∞</h2>
+				<p>무제한 작성</p>
+			</div>
+		</div>
+	</section>
+	
+	<!-- 푸터 -->
+	<footer>
+		<p>&copy; 2024 Spring Boot Board System. All rights reserved.</p>
+		<p>Made with ❤️ using Spring Boot, JPA, and Thymeleaf</p>
+		<p>🤖 Built with <strong>AI Assistance</strong> - Powered by Claude (Anthropic)</p>
+		<p>
+			<a href="https://github.com" target="_blank">GitHub</a> | 
+			<a href="mailto:admin@example.com">Contact</a>
+		</p>
+	</footer>
+</body>
+</html>

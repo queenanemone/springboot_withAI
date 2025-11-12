@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>문의하기</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+		
+		body {
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			background: #f5f7fa;
+		}
+		
+		/* 네비게이션 */
+		nav {
+			background: white;
+			padding: 1rem 2rem;
+			box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+		}
+		
+		nav .container {
+			max-width: 1200px;
+			margin: 0 auto;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+		
+		nav .logo {
+			font-size: 24px;
+			font-weight: bold;
+			color: #667eea;
+		}
+		
+		nav ul {
+			display: flex;
+			list-style: none;
+			gap: 2rem;
+		}
+		
+		nav a {
+			text-decoration: none;
+			color: #333;
+			font-weight: 500;
+			transition: color 0.3s;
+		}
+		
+		nav a:hover {
+			color: #667eea;
+		}
+		
+		/* 콘텐츠 */
+		.content {
+			max-width: 800px;
+			margin: 50px auto;
+			padding: 0 20px;
+		}
+		
+		.header {
+			text-align: center;
+			margin-bottom: 50px;
+		}
+		
+		.header h1 {
+			font-size: 42px;
+			color: #333;
+			margin-bottom: 20px;
+		}
+		
+		.header p {
+			font-size: 18px;
+			color: #666;
+		}
+		
+		.contact-container {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 30px;
+			margin-bottom: 30px;
+		}
+		
+		.contact-box {
+			background: white;
+			padding: 30px;
+			border-radius: 15px;
+			box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+			text-align: center;
+			transition: all 0.3s;
+		}
+		
+		.contact-box:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+		}
+		
+		.contact-box .icon {
+			font-size: 48px;
+			margin-bottom: 20px;
+		}
+		
+		.contact-box h3 {
+			color: #333;
+			margin-bottom: 15px;
+		}
+		
+		.contact-box p {
+			color: #666;
+			margin-bottom: 15px;
+		}
+		
+		.contact-box a {
+			color: #667eea;
+			text-decoration: none;
+			font-weight: 500;
+		}
+		
+		.form-section {
+			background: white;
+			padding: 40px;
+			border-radius: 15px;
+			box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+		}
+		
+		.form-section h2 {
+			color: #667eea;
+			margin-bottom: 30px;
+			font-size: 28px;
+		}
+		
+		.form-group {
+			margin-bottom: 25px;
+		}
+		
+		.form-group label {
+			display: block;
+			color: #333;
+			font-weight: 500;
+			margin-bottom: 10px;
+		}
+		
+		.form-group input,
+		.form-group textarea {
+			width: 100%;
+			padding: 12px 15px;
+			border: 2px solid #e2e8f0;
+			border-radius: 8px;
+			font-size: 16px;
+			font-family: inherit;
+			transition: all 0.3s;
+		}
+		
+		.form-group input:focus,
+		.form-group textarea:focus {
+			outline: none;
+			border-color: #667eea;
+		}
+		
+		.form-group textarea {
+			resize: vertical;
+			min-height: 150px;
+		}
+		
+		.btn-submit {
+			width: 100%;
+			padding: 15px;
+			background: #667eea;
+			color: white;
+			border: none;
+			border-radius: 8px;
+			font-size: 16px;
+			font-weight: bold;
+			cursor: pointer;
+			transition: all 0.3s;
+		}
+		
+		.btn-submit:hover {
+			background: #764ba2;
+			transform: translateY(-2px);
+		}
+		
+		.btn-back {
+			display: inline-block;
+			padding: 12px 30px;
+			background: #e2e8f0;
+			color: #333;
+			text-decoration: none;
+			border-radius: 25px;
+			margin-top: 30px;
+			transition: all 0.3s;
+		}
+		
+		.btn-back:hover {
+			background: #cbd5e0;
+		}
+		
+		.info-box {
+			background: #f0f4ff;
+			padding: 20px;
+			border-radius: 10px;
+			margin-top: 20px;
+			border-left: 4px solid #667eea;
+		}
+		
+		.info-box p {
+			color: #666;
+			line-height: 1.6;
+		}
+		
+		@media (max-width: 768px) {
+			.contact-container {
+				grid-template-columns: 1fr;
+			}
+		}
+	</style>
+</head>
+<body>
+	<!-- 네비게이션 -->
+	<nav>
+		<div class="container">
+			<div class="logo">📝 Board System</div>
+			<ul>
+				<li><a href="/">홈</a></li>
+				<li><a href="/board/list">게시판</a></li>
+				<li><a href="/about">소개</a></li>
+				<li><a href="/contact">문의</a></li>
+			</ul>
+		</div>
+	</nav>
+	
+	<!-- 콘텐츠 -->
+	<div class="content">
+		<div class="header">
+			<h1>문의하기</h1>
+			<p>궁금한 점이나 제안사항을 남겨주세요</p>
+		</div>
+		
+		<div class="contact-container">
+			<div class="contact-box">
+				<div class="icon">📧</div>
+				<h3>이메일</h3>
+				<p>일반 문의 및 제안</p>
+				<a href="mailto:admin@example.com">admin@example.com</a>
+			</div>
+			
+			<div class="contact-box">
+				<div class="icon">💬</div>
+				<h3>GitHub</h3>
+				<p>프로젝트 저장소</p>
+				<a href="https://github.com" target="_blank">github.com/your-repo</a>
+			</div>
+		</div>
+		
+		<div class="form-section">
+			<h2>📝 문의 작성</h2>
+			<form onsubmit="return handleSubmit(event)">
+				<div class="form-group">
+					<label for="name">이름 *</label>
+					<input type="text" id="name" name="name" required placeholder="홍길동">
+				</div>
+				
+				<div class="form-group">
+					<label for="email">이메일 *</label>
+					<input type="email" id="email" name="email" required placeholder="example@email.com">
+				</div>
+				
+				<div class="form-group">
+					<label for="subject">제목 *</label>
+					<input type="text" id="subject" name="subject" required placeholder="문의 제목을 입력해주세요">
+				</div>
+				
+				<div class="form-group">
+					<label for="message">내용 *</label>
+					<textarea id="message" name="message" required placeholder="문의 내용을 상세히 작성해주세요"></textarea>
+				</div>
+				
+				<button type="submit" class="btn-submit">문의 보내기</button>
+			</form>
+			
+			<div class="info-box">
+				<p>
+					<strong>📌 안내사항</strong><br>
+					• 영업일 기준 1~2일 내에 답변 드립니다.<br>
+					• 긴급한 문의는 이메일로 직접 연락해주세요.<br>
+					• 제출된 정보는 문의 응답 목적으로만 사용됩니다.
+				</p>
+			</div>
+		</div>
+		
+		<div style="text-align: center;">
+			<a href="/" class="btn-back">← 메인으로 돌아가기</a>
+		</div>
+	</div>
+	
+	<script>
+		function handleSubmit(event) {
+			event.preventDefault();
+			
+			// 폼 데이터 수집
+			const name = document.getElementById('name').value;
+			const email = document.getElementById('email').value;
+			const subject = document.getElementById('subject').value;
+			const message = document.getElementById('message').value;
+			
+			// 여기서는 간단한 알림만 표시
+			// 실제로는 서버로 전송하는 로직이 필요합니다
+			alert(`문의가 접수되었습니다!\n\n이름: ${name}\n이메일: ${email}\n제목: ${subject}\n\n빠른 시일 내에 답변 드리겠습니다.`);
+			
+			// 폼 초기화
+			event.target.reset();
+			
+			return false;
+		}
+	</script>
+</body>
+</html>
